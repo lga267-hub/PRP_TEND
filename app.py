@@ -5,7 +5,7 @@ import streamlit as st
 # --- ENTRENAMIENTO DEL MODELO (se ejecuta una sola vez al iniciar la app) ---
 # Carga los datos existentes para entrenar el modelo
 df = pd.read_excel("datos_pacientes.xlsx")
-X_completo = df[['edad', 'sexo', 'dolor_nocturno']]
+X_completo = df[['edad', 'sexo', 'dolor_nocturno, tipo_rotura, fm']]
 y_completo = df['exito']
 
 # Crea y entrena el modelo definitivo
@@ -29,12 +29,21 @@ def obtener_datos_paciente():
     
     dolor_texto = st.sidebar.selectbox('¿Presenta dolor nocturno?', ('No', 'Sí'))
     dolor_num = 0 if dolor_texto == 'No' else 1
-    
+
+    fm_texto = st.sidebar.selectbox('¿Presenta antecedentes de dolor nociplástico?', ('No', 'Sí'))
+    fm_num = 0 if dolor_texto == 'No' else 1
+
+    tipo_rotura_texto = st.sidebar.slider('Tipo de rotura', ('Parcial', 'Espesor completo'))
+    tipo_num = 0 if tipo_rotura_texto == 'Espesor completo' else 1
+   
     # Crea un DataFrame con los datos para el modelo
     datos_paciente = pd.DataFrame({
         'edad': [edad],
         'sexo': [sexo_num],
-        'dolor_nocturno': [dolor_num]
+        'dolor_nocturno': [dolor_num],
+        'fm': [fm_num],
+        'tipo_rotura': [tipo_num]
+                    
     })
     return datos_paciente
 
